@@ -1,8 +1,8 @@
 import yt
 import numpy as np
-from . import add_fields as af
+import add_fields as af
 from scipy.interpolate import interp1d
-
+import matplotlib.pyplot as plt
 
 class RadialProfile():
     """
@@ -98,12 +98,8 @@ class RadialProfile():
 
 if __name__=='__main__':
 
-    import matplotlib.pyplot as plt
-    from .eos import NuclearEos as ne
-    eos_file = "/Volumes/Fomalhaut-01/eos/SFHo.h5"
-    neos     = ne.NuclearEOS(eos_file)
 
-    variables = ["dens","entr", "ye  ","deps"]
+    variables = ["dens","entr", "ye  "]
 
     test1D = False
     if test1D:
@@ -111,7 +107,6 @@ if __name__=='__main__':
         path = "/Volumes/Fomalhaut-01/runs/ccsn1d/170322_s20GR_iter/output"
         fn   = path+"/ccsn1d_hdf5_chk_0070"
         ds = yt.load(fn)
-        af.neos = neos
         ds = af.add_ccsn_fields(ds,1)
 
         rp = RadialProfile()
@@ -124,33 +119,37 @@ if __name__=='__main__':
         plt.xlim([0,2e7])
         plt.show()
 
-    test2D = False
+    test2D = True
     if test2D:
         print(" *** unit test: 2D ***")
-        path = "/Volumes/Fomalhaut-01/runs/ccsn2d/170322_s20GR_iter/output"
-        fn   = path+"/ccsn2d_hdf5_plt_cnt_0070"
+        path = "/Users/pan/runs/ccsn2d/190216_gr"
+        fn   = path+"/ccsn2d_hdf5_chk_0500"
         ds = yt.load(fn)
-        af.neos = neos
-        ds = af.add_eint(ds)
         ds = af.add_ccsn_fields(ds,2)
     
+        print("added fields ...")
         rp = RadialProfile()
         rp.get_profile(ds,2,variables)
+        
+        #print("got profiles ...")
+        print(rp.radius)
+        print(rp.profiles["dens"])
+
+        print("plotting")
         plt.figure(2)
         plt.plot(rp.radius,rp.profiles["dens"])
         plt.plot(rp.radius,rp.profiles["entr"])
         plt.plot(rp.radius,rp.profiles["ye  "])
         plt.yscale('log')
         plt.xlim([0,2e7])
-        plt.show()
+        plt.savefig('fig_2d_profile.png')
 
-    test3D = True
+    test3D = False
     if test3D:
         print(" *** unit test: 3D ***")
         path = "/Users/pan/Documents/runs/ccsn3d/20170224_s40GR_LS220"
         fn   = path+"/ccsn3d_hdf5_plt_cnt_0462"
         ds = yt.load(fn)
-        af.neos = neos
         ds = af.add_ccsn_fields(ds,3)
     
         rp = RadialProfile()
