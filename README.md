@@ -11,7 +11,7 @@ conda create --name yt python=3.10
 '''
 * Activate the enviroment `conda activate yt`
 * Install [yt](https://yt-project.org/docs/dev/installing.html) (install `yt4.0-dev` with `python3.x` using the [Anaconda](https://www.anaconda.com/products/individual) is recommended) by typing `conda install --channel conda-forge yt` (only once)
-* Install other related packages (only once) `conda install numpy scipy matplotlib`.
+* Install other related packages (only once) `conda install numpy scipy matplotlib h5py`.
 
 ## Use yt in Jupyter Lab
 
